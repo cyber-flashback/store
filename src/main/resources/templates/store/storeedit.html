@@ -1,0 +1,32 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+<meta charset="UTF-8">
+<link th:href="@{/css/top.css}"  rel="stylesheet"	>
+<title>백딜리버리 - 메뉴수정</title>
+</head>
+<body>
+<div th:replace="/include/top"></div>
+<form action="storeupdate" method=post enctype="multipart/form-data">
+<table border="1" align="center" width='480'>
+<th:block th:each="editlist : ${editlist}">
+<tr><td width="300"><img th:src="@{/goodsimg/}+${editlist.goodsimg}" width=300  height=200/></td>
+	<td align="center">
+		<input type="hidden" th:value="${editlist.sname}" name="sname">
+		<input type="hidden" th:value="${editlist.goodsimg}" name="goodsimg">
+		<input type="hidden" th:value="${editlist.snum}" name="snum">
+		<input type="text" th:value="${editlist.goods}" name="goods"><br><br>
+		<input type="text" th:value="${editlist.price}" name="price">
+	</td>
+</tr>
+	
+	<td colspan='2'><input type="file" name="goodsfile"></td>
+</tr>
+</th:block>
+<tr><td colspan="2" align="center"><input type=submit value="수정하기"></td></tr>
+</table>
+</form>
+
+</body>
+</html>
+

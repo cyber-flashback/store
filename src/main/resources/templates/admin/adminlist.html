@@ -1,0 +1,65 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+<link th:href="@{/css/top.css}"  rel="stylesheet">
+<meta charset="UTF-8">
+<title>백딜리버리 - (관리자)회원관리</title>
+</head>
+<body>
+<div th:replace="/include/top"></div>
+<h2 align="center"> 회원 목록 </h2>
+<hr><br>
+<table border="1" align="center" width="550">
+<tr bgcolor="#0055b8">
+	<td align=center><font color="white">회원ID</td>
+	<td align=center><font color="white">회원명</td>
+	<td align=center><font color="white">가입날짜</td>
+	<td align=center><font color="white">총구매액수</td>
+	<td align=center><font color="white">구매목록</font></td>
+	
+</tr>
+<th:block th:each=" adminlist : ${adminlist}">
+<tr>
+	<td align=center>[[${adminlist.username}]]</td>
+	<td align=center>[[${adminlist.name}]]</td>
+	<td align=center>[[${adminlist.signdate}]]</td>
+	<td align=center>[[|${#numbers.formatInteger(adminlist.allprice,0,'COMMA')}원|]]</td>
+	<td align=center>
+		<th:block th:if="${adminlist.allprice != 0}">
+		<a th:href="@{admindetaillist(username = ${adminlist.username})}">
+		<button>자세히 보기</button>
+	</a>
+	</th:block>
+	</td>
+</tr>
+</th:block>
+</table>
+
+<div align="center">
+	<th:block th:if="${paging.startPage != 1 }">	
+	<a th:href="@{adminlist(nowPage=${paging.startPage-1},cntPerPage=${paging.cntPerPage})}">&lt;</a>
+	</th:block>
+<th:block th:each="p : ${#numbers.sequence(paging.startPage, paging.endPage)}">
+	<th:block th:if="${p == paging.nowPage}">
+	<span>[[${p}]]</span>
+	</th:block>
+	<th:block th:unless="${p == paging.nowPage}">
+	<a th:href="@{adminlist(nowPage = ${p},ch1=${paging.ch1},ch2=${paging.ch2})}">[[${p}]]</a>
+	</th:block>
+	</th:block>
+<th:block th:if="${paging.endPage != paging.lastPage}">	
+	<a th:href="@{adminlist(nowPage=${paging.endPage}+1,cntPerPage=${paging.cntPerPage})}">&gt;</a>
+</th:block>		
+</div>
+
+ <form action="adminlist" align="center">
+   <select name=ch1>
+     <option value=username> 아이디 </option>
+     <option value=name> 이름 </option>
+   </select>
+ <input  type=text  name=ch2>
+ <input  type=submit  value="검색하기">
+ </form>
+
+</body>
+</html>

@@ -1,0 +1,46 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+<link th:href="@{/css/top.css}"  rel="stylesheet">
+<meta charset="UTF-8">
+<th:block th:each="storebuylist : ${storebuylist}">
+<title>백딜리버리 - [[${storebuylist.goods}]]</title>
+</th:block>
+</head>
+<body>
+	<div th:replace="/include/top"></div>
+<th:block>
+<form action="Cartinsert">
+<table border=1 align="center" height="400">
+	<input type="hidden" th:value="${session.username}" name="username">
+	<th:block th:each="storebuylist : ${storebuylist}">
+	<input type="hidden" th:value="${storebuylist.sname}" name="sname">
+	<input type="hidden" th:value="${storebuylist.idx}" name="idx">
+	<tr><td colspan="2"><img th:src="@{./goodsimg/}+${storebuylist.goodsimg}" width=300  height=300/></td></tr>
+	<tr><td>메뉴</td><td><input type=text th:value="${storebuylist.goods}" name="goods" readonly></td></tr>
+	<tr><td>가격</td><td><input type=text th:value="|${#numbers.formatInteger(storebuylist.price,0,'COMMA')}원|" name="visualprice" readonly></td></tr>
+	<input type=hidden th:value="${storebuylist.price}" name="price" readonly>
+	<tr><td>수량</td>
+	<td>
+	 <select name="amount">
+		<option value="1" selected> 1 </option>
+		<option value="2"> 2 </option>
+		<option value="3"> 3 </option>
+		<option value="4"> 4 </option>
+		<option value="5"> 5 </option>
+		<option value="6"> 6 </option>
+		<option value="7"> 7 </option>
+		<option value="8"> 8 </option>
+		<option value="9"> 9 </option>
+	 </select>
+	</td></tr>
+	<tr><td colspan="2" align="center">
+		<input type=submit value="주문하기">
+		<a th:href="@{storedetaillist(idx = ${storebuylist.idx})}"><button>돌아가기</button></a>
+	</td></tr>
+</table>
+</form>
+</th:block>
+</body>
+</html>
+

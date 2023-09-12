@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yearstore.k1.sign.SignDao">
+
+<insert id="signup" parameterType="com.yearstore.k1.sign.SignVO">
+	insert into yearmember (id, password, name, birth, email, signdate, zipcode, address, jibunaddress, address2)
+	values(#{username}, #{password}, #{name}, #{birth}, #{email}, sysdate, #{zipcode}, #{address, jdbcType=VARCHAR}, #{jibunaddress, jdbcType=VARCHAR}, #{address2} )
+</insert>
+
+
+<select id="IDcheck" resultType="String">
+	select id from yearmember where id = #{username, jdbcType=VARCHAR}
+</select>
+
+<select id="login" resultType="com.yearstore.k1.sign.SignVO">
+	select id as username, password, name from yearmember where id = #{username, jdbcType=VARCHAR}
+</select>
+
+<update id="updatemember" parameterType="com.yearstore.k1.sign.SignVO">
+	update yearmember set
+	email=#{email}, zipcode=#{zipcode}, address=#{address}, address2=#{address2} where id=#{username}
+</update>
+
+<select id="selectmember" resultType="com.yearstore.k1.sign.SignVO">
+	select id as username, password, name, birth, email, signdate, zipcode, address, jibunaddress, address2 from yearmember where id=#{username}
+</select>
+ 
+</mapper>
+

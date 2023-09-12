@@ -1,0 +1,91 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+<link th:href="@{/css/top.css}"  rel="stylesheet"	>
+<meta charset="UTF-8">
+<title>백딜리버리 - 장바구니</title>
+</head>
+<th:block th:unless="${cartcount == '0'}">
+<script th:inline="javascript">
+	function del(){
+		alert("삭제되었습니다.")
+	}
+	function upd(){
+		alert("수정되었습니다.")
+	}
+	function delOne(k1, k2){
+		alert(k1+"이(가) 삭제 되었습니다.")
+		location.href="/Cartdelete?goods="+k1+"&username="+k2
+		
+	}
+	
+</script>
+<body>
+<div th:replace="/include/top"></div>
+<form>
+<table border="1" align="center" width="600">
+<input type="hidden" th:value="${session.username}" name="username">
+<th:block th:each="cartsname : ${cartsname}">
+	<td colspan="4" align="center" bgcolor="#0055b8">
+		<font color="white">
+		[[${cartsname.sname}]]
+		</font>
+		</td>
+<th:block th:each="cartlist : ${cartlist}">
+<tr>
+	<th:block th:if="${cartsname.sname} == ${cartlist.sname}">
+	<td align="center"><img th:src="@{./goodsimg/}+${cartlist.goodsimg}" width=200  height=150/> </td>
+	<td align="center">
+		<input type="hidden" th:value="${cartlist.sname}" name="sname">
+		[[${cartlist.goods}]]
+		<input type="hidden" th:value="${cartlist.goods}" name="goods"><br><br>
+		[[|${#numbers.formatInteger(cartlist.price,0,'COMMA')}원|]]
+		<input type="hidden" th:value="${cartlist.price}" name="price">
+	</td> 
+	<td align=center> <select name="amount">
+		<option selected hidden> [[${cartlist.amount}]] </option>
+		<option> 1 </option>
+		<option> 2 </option>
+		<option> 3 </option>
+		<option> 4 </option>
+		<option> 5 </option>
+		<option> 6 </option>
+		<option> 7 </option>
+		<option> 8 </option>
+		<option> 9 </option>
+	</select>개
+	</td>
+	<td align="center"><input type=button value="취소하기" th:onclick="delOne([[${cartlist.goods}]],[[${cartlist.username}]])"></td>
+	</th:block>	
+</tr>
+</th:block>
+</th:block>
+<tr>
+<tr><td colspan="4">
+		가격 : [[|${#numbers.formatInteger(#aggregates.sum(cartlist.![price*amount]),0,'COMMA')}원|]]<br>
+	<th:block th:if="${#aggregates.sum(cartlist.![price*amount])} lt 100000">
+	배송비 : 3,000원 (100,000원 이상 구매시 배송비 무료)<br>
+	<font size=2>※ 도서·산간 지역은 배송비 3,000원이 추가 됩니다.</font>
+	</th:block>
+	<th:block th:unless="${#aggregates.sum(cartlist.![price*amount])} lt 100000">
+	배송비 : 0원
+	</th:block>
+</td></tr>
+<td colspan="4" align="center">
+<input type=submit value="주문하기" formaction="Cartorder">&ensp;
+<input type=submit value="수정하기" onclick="upd()" formaction="Cartupdate">&ensp;
+<input type=submit value="비우기" onclick="del()" formaction="CartAlldelete" >
+</td>
+</tr>
+</table>
+</form>
+</th:block>
+<th:block th:if="${cartcount == '0'}">
+	<div th:replace="/include/top"></div>
+	<h3 align="center">장바구니가 비어 있습니다.</h3>
+</th:block>
+
+<br><br>
+
+</body>
+</html>

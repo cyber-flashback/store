@@ -1,0 +1,55 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+<link th:href="@{/css/top.css}"  rel="stylesheet">
+<meta charset="UTF-8">
+<title>백딜리버리 - 구매내역조회</title>
+</head>
+<script th:inline="javascript">
+	function buy(){
+		if(confirm("구매확정을 하시겠습니까?")){
+			alert("구매확정 되셨습니다.");
+			location.href="/orderbuylistdelete";
+			//const btnElement = document.getElementById('button1');
+			//btnElement.innerHTML = '구매확정';
+		}else{
+			return
+  		}
+	}
+	
+</script>
+<body>
+<div th:replace="/include/top"></div>
+<table border="1" align="center" width="600">
+<br>
+<tr><td colspan="3" align="center" bgcolor="#0055b8"><font color="white">구매내역</font></td></tr>
+
+<th:block th:each="ordernumberlist : ${ordernumberlist}">
+<tr>
+	<td width="300">
+		주문번호 : [[${ordernumberlist.ordernumber}]]<br>
+		총결제금액 : [[|${#numbers.formatInteger(ordernumberlist.allprice+ordernumberlist.deliveryfee,0,'COMMA')}원|]] (배송비포함)<br>
+		</td>
+
+<td width="150" align="right" rowspan="2">
+<th:block th:each="orderbuylist : ${orderbuylist}">
+	<th:block th:if="${ordernumberlist.ordernumber} == ${orderbuylist.ordernumber}" >
+		[[${orderbuylist.goods}]]
+	<br>
+	[[|${#numbers.formatInteger(orderbuylist.price,0,'COMMA')}원|]] ([[|${orderbuylist.amount}개|]])
+	<br>
+	</th:block>
+	</th:block>
+	</td>
+</tr>
+<tr>
+	<td>
+		배송지 : ([[${ordernumberlist.zipcode}]])<br>[[${ordernumberlist.address}]] [[${ordernumberlist.address2}]]
+	</td>
+</tr>
+</th:block>
+	
+</table>
+
+</body>
+</html>

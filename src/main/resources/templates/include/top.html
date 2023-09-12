@@ -1,0 +1,60 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<link th:href="@{/css/top.css}"  rel="stylesheet"	>
+<style>
+	#span1{
+		display: inline-block;
+		width: 1590px;
+		text-align: right;
+	}
+	#span2{
+		display: inline-block;
+		width: 1400px;
+		text-align: right;
+	}
+	#span3{
+		display: inline-block;
+		width: 1400px;
+		text-align: right;
+	}
+</style>
+
+</head>
+<body>
+<div id=body>    
+<header>
+<img th:src="@{/topimg/}+100year.jpg"/ height="200px">
+</header>
+<nav>
+&emsp;<a href="index">HOME</a>&emsp;
+<th:block th:if="${session.name} == null">
+<span id="span1">
+<a href="signup"> 회원가입 </a>&emsp;
+<a href="loginpage"> 로그인 </a>&emsp;
+</span>
+</th:block>
+<th:block th:unless="${session.name} == null">
+<a href="storelist">백년가게</a>&emsp;
+<a href="Cartlist">장바구니</a>&emsp;
+<a href="Orderbuylist">구매내역조회</a>&emsp;
+<th:block th:unless="${session.username} == 'admin'">
+<span id="span2">
+</th:block>
+<th:block th:if="${session.username} == 'admin'">
+<span id="span3">
+</th:block>
+<font size="2.5px" color="black">
+<b>[[${session.name}]]</b>님 환영합니다.&emsp;&emsp;
+</font>
+<th:block th:if="${session.username} == 'admin'">
+<a href="adminlist"><button> 회원관리 </button></a>&emsp;
+</th:block>
+<th:block th:unless="${session.username} == 'admin'">
+<a href="memberinfo"><button>회원정보</button></a>&emsp;
+</th:block>
+<a href="logout"><button> 로그아웃 </button></a>&emsp;
+</th>
+</span>
+
+</nav>
+<br>

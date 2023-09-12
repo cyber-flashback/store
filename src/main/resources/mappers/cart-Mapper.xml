@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yearstore.k1.cart.CartDao">
+
+<insert id="insertcart" parameterType="com.yearstore.k1.cart.CartVO">
+	insert into cartlist(sname, goods, price, amount, id)
+	values(#{sname}, #{goods}, #{price}, #{amount}, #{username})
+</insert>
+
+ 
+<select id="cartlist" resultType="com.yearstore.k1.cart.CartVO">
+	select id as username, b.sname as sname ,b.goods as goods ,b.price as price, goodsimg, sum(amount) as amount
+	from cartlist c join buylist b on c.sname=b.sname and c.goods=b.goods and b.price=c.price where id = #{username}
+	group by id, b.sname, b.goods, b.price, goodsimg order by sname
+</select>
+
+<update id="updatecart" parameterType="com.yearstore.k1.cart.CartVO">
+	update cartlist set amount=#{amount} where id = #{username} and goods=#{goods}
+</update>
+
+<delete id="deleteAllcart" parameterType="com.yearstore.k1.cart.CartVO">
+	delete from cartlist where id = #{username}
+</delete>
+
+<delete id="deletecart" parameterType="com.yearstore.k1.cart.CartVO">
+	delete from cartlist where id = #{username} and goods = #{goods}
+</delete>
+
+<select id="count" resultType="String">
+	select count(*) from cartlist where id = #{username}
+</select>
+
+<select id="cartsname" resultType="com.yearstore.k1.cart.CartVO">
+	select distinct sname from cartlist where id = #{username} order by sname
+</select>
+
+
+</mapper>

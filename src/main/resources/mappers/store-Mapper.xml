@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yearstore.k1.store.StoreDao">
+
+<insert id="storeinsert" parameterType="com.yearstore.k1.store.StoreVO">
+	insert into yearstore( idx, addr, deaddr, dearea, area, sname, tel, val )
+	values(yearstore_seq.NEXTVAL, #{addr, jdbcType=VARCHAR}, #{deaddr, jdbcType=VARCHAR}, #{dearea, jdbcType=VARCHAR}, #{area, jdbcType=VARCHAR}, #{sname, jdbcType=VARCHAR}, #{tel}, #{val, jdbcType=VARCHAR})
+</insert>
+
+<select id="storeselect" resultType="com.yearstore.k1.store.StoreVO">
+select rownum, B.* from
+	(select rownum as rnum, A.* from
+	(select * from yearstore where area='서울'
+	<if test="ch1 == 'sname'">
+	and sname like '%'||#{ch2}||'%'
+	</if>
+	<if test="ch1 == 'val'">
+	and val like '%'||#{ch2}||'%'
+	</if>
+	 order by idx)
+	<![CDATA[
+	A where rownum <=#{end})
+	B where rnum >= #{start}
+	]]>
+</select>
+
+<select id="storedetailselect" resultType="com.yearstore.k1.store.StoreVO">
+	select * from yearstore where idx=#{idx}
+</select>
+
+<select id="buylist" resultType="com.yearstore.k1.store.StoreVO">
+	select b.sname as sname, goods, price, idx, goodsimg, snum
+	from buylist b join yearstore y on b.sname=y.sname where idx=#{idx}
+</select>
+
+<select id="storebuylist" resultType="com.yearstore.k1.store.StoreVO">
+	select b.sname as sname, goods, price, idx, goodsimg, snum
+	from buylist b join yearstore y on b.sname=y.sname where goods=#{goods}
+</select>
+
+<select id="storecount" resultType="int">
+	select count(*) from yearstore where area='서울'
+	<if test="ch1 == 'sname'">
+	and sname like '%'||#{ch2}||'%'
+	</if>
+	<if test="ch1 == 'val'">
+	and val like '%'||#{ch2}||'%'
+	</if>
+</select>
+
+<update id="storeupdate" parameterType="com.yearstore.k1.store.StoreVO">
+	update buylist set goods=#{goods}, price=#{price}, goodsimg=#{goodsimg}
+	where snum=#{snum}
+</update>
+
+<update id="storeupdate2" parameterType="com.yearstore.k1.store.StoreVO">
+	update buylist set goods=#{goods}, price=#{price}
+	where snum=#{snum}
+</update>
+
+</mapper>
+

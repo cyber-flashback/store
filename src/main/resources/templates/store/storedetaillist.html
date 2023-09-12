@@ -1,0 +1,67 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+<link th:href="@{/css/top.css}"  rel="stylesheet">
+<meta charset="UTF-8">
+<th:block th:each="storedetaillist : ${storedetaillist}">
+<title>백딜리버리 - [[${storedetaillist.sname}]]</title>
+</th:block>
+</head>
+<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+<script th:inline="javascript">
+	function ShopK(){
+	$('#cartinsert').serialize();
+	alert($('#cartinsert').serialize());
+	}
+</script>
+<style>
+	#a1:link {
+  color : white;
+  text-decoration-line:none;
+}
+#a1:visited {
+  color : white;
+  text-decoration-line:none;
+}
+#a1:hover {
+  color : red;
+  text-decoration-line:none;
+}
+#a1:active {
+  color : red;
+  text-decoration-line:none;
+}
+</style>
+<body>
+<div th:replace="/include/top"></div>
+<form action="Cartinsert">
+	<br>
+<table border="1" align="center" width="550">
+<input type="hidden" th:value="${storedetaillist.sname}" name="sname">
+<tr th:each="storedetaillist : ${storedetaillist}">
+	<td colspan="2" align="center" bgcolor="#0055b8">
+		 <font size="5px" color="white"><b>
+			 <a th:href="@{kakaomap(idx = ${storedetaillist.idx})}" id="a1"
+		  onclick="window.open(this.href, '_blank', 'width=800, height=600'); return false;">[[${storedetaillist.sname}]]</a> </b></font>&ensp;<font color="white">([[${storedetaillist.tel}]])<br>
+		 [[${storedetaillist.addr} +' ' + ${storedetaillist.deaddr}]]</font></td>
+	</tr>
+<th:block th:each="buylist : ${buylist}">
+<tr>
+<tr><td rowspan="2" width="300"><a th:href="@{storebuylist(goods = ${buylist.goods})}"><img th:src="@{/goodsimg/}+${buylist.goodsimg}" width=300  height=200/></a></td></tr>
+<tr><td align="right">[[${buylist.goods}]]<br><br><br>[[|${#numbers.formatInteger(buylist.price,0,'COMMA')}원|]]</a></td></tr>
+</tr>
+</th:block>
+</table>
+</form>
+<br><br>
+<th:block th:each="storedetaillist : ${storedetaillist}">
+<div align="center">
+<a th:href="@{storelist}"><button>리스트로 돌아가기</button></a>&emsp;&emsp;
+<th:block th:if="${session.username == 'admin'} ">
+<a th:href="@{storeedit(idx = ${storedetaillist.idx})}"><button>메뉴 수정하기</button></a>&emsp;&emsp;
+</th:block>
+</div>
+</th:block>
+</body>
+</html>
+

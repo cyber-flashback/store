@@ -1,0 +1,62 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+<meta charset="UTF-8">
+<link th:href="@{/css/top.css}"  rel="stylesheet">
+<title>백딜리버리 - 백년가게 리스트</title>
+</head>
+<body>
+<div th:replace="/include/top"></div>
+<br>
+<table border="1" align="center">
+<tr>
+	<td colspan="4" align="center" bgcolor="#0055b8"><font color="white">백년가게 리스트</font></td>
+	
+</tr>
+<th:block th:each="storelist : ${storelist}">
+	<tr><td rowspan=5><a th:href="@{storedetaillist(idx = ${storelist.idx})}"><img th:src="@{/storeimg/}+${storelist.simg}" width=300  height=200/></a></td></tr>
+<tr>	
+	<td>  [[${storelist.sname}]] </a> </td>
+</tr> 
+<tr>
+	<td th:text="${storelist.addr} +' ' + ${storelist.deaddr}"></td>
+</tr>
+<tr>
+	<td th:text="${storelist.tel}"> </td>
+</tr>
+<tr>
+	<td th:text="${storelist.val}"> </td>
+</tr>
+	[[${storelist.ch1}]]
+</tr>		
+</table>
+<br>
+
+<div align="center">
+	<th:block th:if="${paging.startPage != 1 }">	
+	<a th:href="@{storelist(nowPage=${paging.startPage-1},cntPerPage=${paging.cntPerPage})}">&lt;</a>
+	</th:block>
+<th:block th:each="p : ${#numbers.sequence(paging.startPage, paging.endPage)}">
+	<th:block th:if="${p == paging.nowPage}">
+	<span>[[${p}]]</span>
+	</th:block>
+	<th:block th:unless="${p == paging.nowPage}">
+	<a th:href="@{storelist(nowPage = ${p},ch1=${paging.ch1},ch2=${paging.ch2})}">[[${p}]]</a>
+	</th:block>
+	</th:block>
+<th:block th:if="${paging.endPage != paging.lastPage}">	
+	<a th:href="@{storelist(nowPage=${paging.endPage}+1,cntPerPage=${paging.cntPerPage})}">&gt;</a>
+</th:block>		
+</div>
+
+ <form action="storelist" align="center">
+   <select name=ch1>
+     <option value=sname> 가게이름 </option>
+     <option value=val> 주요사업 </option>
+   </select>
+ <input  type=text  name=ch2>
+ <input  type=submit  value="검색하기">
+ </form> 
+  
+</body>
+</html>

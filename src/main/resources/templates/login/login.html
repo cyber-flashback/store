@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link th:href="@{/css/top.css}"  rel="stylesheet">
+<title>백딜리버리 - 로그인</title>
+</head>
+
+<body>
+<div th:replace="/include/top"></div>
+<form action="login">
+<table border="1" align=center width="300">
+<tr><td align="center">아이디</td><td align="center"><input type=text name=username></td></tr>
+<tr><td align="center">패스워드</td><td align="center"><input type=text name=password></td></tr>
+<tr><td align="center" colspan="2"><input type=submit value="로그인하기"></td></tr>
+</table>
+</form>
+
+</body>
+</html>

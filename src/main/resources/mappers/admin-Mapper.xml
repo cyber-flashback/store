@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yearstore.k1.admin.AdminDao">
+
+<insert id="insertorder" parameterType="com.yearstore.k1.admin.AdminVO">
+	insert into adminorder(id, sname, goods, price, amount, name, zipcode, address, address2, orderdate)
+	values( #{username}, #{sname}, #{goods}, #{price}, #{amount}, #{name}, #{zipcode}, #{address}, #{address2}, sysdate)
+</insert>
+
+<insert id="insertprice" parameterType="com.yearstore.k1.admin.AdminVO">
+	insert into adminprice(id, deliveryfee, allprice, ordernumber, orderdate)
+	values( #{username}, #{deliveryfee}, #{allprice}, ordernumber_seq.nextval, sysdate)
+</insert>
+ 
+<select id="selectordernumber" resultType="com.yearstore.k1.admin.AdminVO">
+	select rownum, B.* from 
+	(select  rownum as rnum, A.* from
+	(select * from adminprice where id=#{username} order by ordernumber desc) A)B
+	where rnum = 1
+</select> 
+
+<update id="deleteorderlist" parameterType="com.yearstore.k1.admin.AdminVO">
+	delete from orderlist where id = #{username}
+</update>
+ 
+<select id="orderbuylist" resultType="com.yearstore.k1.admin.AdminVO">
+	select o.id as username, sname, goods, price, amount, name, zipcode, address, address2, deliveryfee, allprice, ordernumber, o.orderdate as orderdate
+	from adminorder o join adminprice p on o.orderdate=p.orderdate where o.id = #{username} order by ordernumber desc
+</select>
+
+<select id="ordernumberlist" resultType="com.yearstore.k1.admin.AdminVO">
+	select distinct ordernumber, o.id as id, deliveryfee, allprice,o.orderdate as orderdate, name, zipcode, address, address2
+	from adminorder o join adminprice p on o.orderdate=p.orderdate where o.id=#{username} order by ordernumber desc
+</select>
+
+<select id="adminlist" resultType="com.yearstore.k1.admin.AdminVO">
+select rownum, B.* from
+	(select rownum as rnum, A.* from
+	(select y.id as username, name , signdate, sum(allprice+deliveryfee) as allprice from yearmember y full outer join adminprice p on y.id=p.id group by y.id,name,signdate
+	<if test="ch1 == 'username'">
+	having y.id like '%'||#{ch2}||'%'
+	</if>
+	<if test="ch1 == 'name'">
+	having name like '%'||#{ch2}||'%'
+	</if>
+	 order by signdate desc)
+	<![CDATA[
+	A where rownum <=#{end})
+	B where rnum >= #{start}
+	]]>
+</select>
+ 
+<select id="admincount" resultType="int">
+	select count(*) from yearmember
+	<where>
+	<if test="ch1 == 'username'">
+	and id like '%'||#{ch2}||'%'
+	</if>
+	<if test="ch1 == 'name'">
+	and name like '%'||#{ch2}||'%'
+	</if>
+	</where>
+</select> 
+ 
+ 
+</mapper>
+

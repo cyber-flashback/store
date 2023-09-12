@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yearstore.k1.order.OrderDao">
+
+<select id="orderlist" resultType="com.yearstore.k1.order.OrderVO">
+	select sname, goods, sum(price) as price, sum(amount) as amount, y.id as username, address, address2, name
+	from yearmember y join orderlist o on y.id=o.id group by sname, goods, y.id, address, address2, name having y.id=#{username}
+</select>
+
+<insert id="insertorder" parameterType="com.yearstore.k1.order.OrderVO">
+	insert into orderlist(sname, goods, price, amount, id)
+	values(#{sname}, #{goods}, #{price}, #{amount}, #{username})
+</insert>
+
+<select id="ordermember" resultType="com.yearstore.k1.order.OrderVO">
+	select distinct y.id as username, address, address2, zipcode, name 
+	from yearmember y join orderlist o on y.id=o.id where y.id=#{username} group by y.id, address, address2, name, zipcode
+</select>
+
+</mapper>
+

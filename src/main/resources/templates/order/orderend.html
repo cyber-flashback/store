@@ -1,0 +1,20 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+<link th:href="@{/css/top.css}"  rel="stylesheet">
+<meta charset="UTF-8">
+<title>백딜리버리 - 주문완료</title>
+</head>
+<script>
+	setTimeout("location.href='index'",5000);
+</script>
+
+<body>
+<div th:replace="/include/top"></div>
+<div align="center">
+<h2>주문이 완료되었습니다.</h2><br><br>
+주문번호 : [[${ordernumber.ordernumber}]]<br><br>
+5초 후 자동으로 메인화면으로 이동합니다.
+</div>
+</body>
+</html>
